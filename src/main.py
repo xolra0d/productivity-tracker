@@ -15,7 +15,6 @@ async def health():
 
 
 @app.get("/start")
-@app.get("/unpause")
 async def start():
     match WorkingCounter.state:
         case ProgrammerState.AWAIT:
@@ -30,7 +29,6 @@ async def start():
 
 
 @app.get("/end")
-@app.get("/pause")
 async def end():
     match WorkingCounter.state:
         case ProgrammerState.AWAIT:
