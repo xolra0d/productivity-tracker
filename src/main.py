@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
-
+import typing as tp
 from fastapi import FastAPI
-
 from src.database import Database, ProgrammerState, WorkingCounter
 from src.middleware import HeaderSecretChecker
 
@@ -10,12 +9,12 @@ app.add_middleware(HeaderSecretChecker)
 
 
 @app.get("/health")
-async def health():
+async def health() -> dict[str, bool]:
     return {"Status": True}
 
 
 @app.get("/start")
-async def start():
+async def start() -> None:
     match WorkingCounter.state:
         case ProgrammerState.AWAIT:
             WorkingCounter.start()
@@ -31,7 +30,7 @@ async def start():
 
 
 @app.get("/end")
-async def end():
+async def end() -> None:
     match WorkingCounter.state:
         case ProgrammerState.AWAIT:
             pass
@@ -41,11 +40,11 @@ async def end():
 
 
 @app.get("/query")
-def query(sql: str):
-    result = Database.query(sql=sql)
-    if isinstance(result, str):
-        return {"ok": False, "error": result}
-    return {"ok": True, "rows": result}
+def query(sql: str) -> dict[str, bool | str | list[tp.Any]]:
+    try:
+        return {"ok": True, "rows": Database.query(sql=sql)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
 
 
 @app.post("/working")
