@@ -1,7 +1,7 @@
 Productivity Tracker
 ---
 
-It's impossible to explain the 
+_The way we spend our time defines who we are._ - Jonathan Estrin
 
 Allows to track your work time and display it in any way (using grafana). Provides two API points (`/start` & `/end`) to track your time, and `/query` for sql queries.
 
